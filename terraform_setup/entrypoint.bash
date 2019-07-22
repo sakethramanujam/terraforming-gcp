@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+curl {vault url} -o service-account.json
+export GOOGLE_APPLICATION_CREDENTIALS="./service-account.json"
+
 active_account=""
 function get-active-account() {
   active_account=$(gcloud auth list --filter=status:ACTIVE --format="value(account)" 2> /dev/null)
