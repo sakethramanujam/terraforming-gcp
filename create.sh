@@ -13,6 +13,9 @@ gcloud projects create $gcpprojectname --name $gcpprojectname
 # export CURRENT_GCP_PROJECT_REPO="github_saketh_ramanujam_$gcpprojectname"
 # set projectname to current config scope
 gcloud config set project $gcpprojectname
+# App Engine Initilization
+gcloud app create --region=asia-south1
+echo "Creating App Engine Application in Asia South-1[Mumbai]"
 # display current config
 gcloud config list
 # enable billing on project
@@ -25,11 +28,28 @@ gcloud beta billing projects link $gcpprojectname --billing-account <BILLING-ACC
     To find available services use 
     $ gcloud services list --available
 ''
-gcloud services enable \
-appengine.googleapis.com cloudbuild.googleapis.com \
-run.googleapis.com compute.googleapis.com stackdriver.googleapis.com  
+gcloud services enable appengine.googleapis.com
+gcloud services enable cloudbuild.googleapis.com
+gcloud services enable run.googleapis.com
+gcloud services enable compute.googleapis.com
+gcloud services enable stackdriver.googleapis.com
 
-gcloud 
+# getting project number from id
+project_num=$(gcloud projects list --filter=$gcpprojectname --format="value(PROJECT_NUMBER)")
+
+
+# Role assignment
+gcloud projects add-iam-policy-binding $gcpprojectname --member \
+serviceAccount:$project_num@cloudbuild.gserviceaccount.com --role roles/editor
+
+gcloud projects add-iam-policy-binding $gcpprojectname --member \
+serviceAccount:$project_num@cloudbuild.gserviceaccount.com --role roles/storage.admin
+
+gcloud projects add-iam-policy-binding $gcpprojectname --member \
+serviceAccount:$project_num@cloudbuild.gserviceaccount.com --role roles/appengine.appAdmin
+
+
+
 #folder configs
 cd projectname
 git init
