@@ -14,6 +14,6 @@ with open("config.json", "r") as config:
     configs = json.load(config)
 
 user = configs['github']['user']
-token = configs['github']['token']
+token = configs['github']['key']
 response = requests.post(url="https://api.github.com/user/repos",
                          auth=(user, token), data=json.dumps(request_payload))

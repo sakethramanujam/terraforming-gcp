@@ -16,7 +16,7 @@ structure for config.json
 {
     "github":{
         "user":"....",
-        "token":"...."
+        "key":"...."
     }
 }
 ```
